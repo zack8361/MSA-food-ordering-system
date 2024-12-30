@@ -14,4 +14,9 @@ import lombok.ToString;
 public class Product extends BaseEntity<ProductID> {
     private String name;
     private Money price;
+
+    public void updateWithConfirmedNameAndPrice(String name, Money price) {
+        this.name = name;
+        this.price = price;
+    }
 }

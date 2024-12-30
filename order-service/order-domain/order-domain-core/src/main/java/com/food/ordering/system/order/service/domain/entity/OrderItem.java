@@ -18,4 +18,16 @@ public class OrderItem extends BaseEntity<OrderItemID> {
     private final int quantity;
     private final Money price;
     private final Money subTotal;
+
+    void initializeOrderItem(OrderId orderId, OrderItemID orderItemID) {
+        this.orderId = orderId;
+        super.setId(orderItemID);
+    }
+
+    boolean isPriceValid(){
+        return price.isGreaterThanZero() &&
+                price.equals(product.getPrice()) &&
+                price.multiply(quantity).equals(subTotal);
+    }
+
 }
