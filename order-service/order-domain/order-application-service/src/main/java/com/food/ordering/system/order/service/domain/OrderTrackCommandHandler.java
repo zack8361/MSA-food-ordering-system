@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class OrderTrackCommandHandler {
-
-    TrackOrderResponse trackOrder(TrackOrderQuery trackOrderQuery) {
-
-    }
+//
+//    TrackOrderResponse trackOrder(TrackOrderQuery trackOrderQuery) {
+//        // 주문 추적 ID로 주문을 찾는다.
+//    }
 }

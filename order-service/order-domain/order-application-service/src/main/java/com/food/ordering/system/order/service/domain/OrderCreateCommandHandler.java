@@ -3,6 +3,9 @@ package com.food.ordering.system.order.service.domain;
 import com.food.ordering.system.order.service.domain.dto.create.CreateOrderCommand;
 import com.food.ordering.system.order.service.domain.dto.create.CreateOrderResponse;
 import com.food.ordering.system.order.service.domain.entity.Customer;
+import com.food.ordering.system.order.service.domain.entity.Order;
+import com.food.ordering.system.order.service.domain.entity.Restaurant;
+import com.food.ordering.system.order.service.domain.event.OrderCreateEvent;
 import com.food.ordering.system.order.service.domain.exception.OrderDomainException;
 import com.food.ordering.system.order.service.domain.mapper.OrderDataMapper;
 import com.food.ordering.system.order.service.domain.ports.output.repository.CustomerRepository;
@@ -30,7 +33,18 @@ public class OrderCreateCommandHandler {
     @Transactional
     public CreateOrderResponse createOrder(CreateOrderCommand createOrderCommand) {
         checkCustomer(createOrderCommand.getCustomerId());
-        checkRestaurant(createOrderCommand.getRestaurantId());
+        Restaurant restaurant = checkRestaurant(createOrderCommand);
+        Order order = orderDataMapper.createOrderCommandToOrder(createOrderCommand);
+        OrderCreateEvent orderCreateEvent = orderDomainService.validateAndInitiateOrder(order, restaurant);
+        return orderDataMapper.orderToCreateOrderResponse(orderRepository.save(order));
+    }
+
+
+
+    private Restaurant checkRestaurant(CreateOrderCommand createOrderCommand) {
+        return restaurantRepository.findRestaurantInformation(orderDataMapper.createOrderCommandToRestaurant(createOrderCommand)).orElseThrow(() -> {
+            throw new OrderDomainException("Restaurant not found with id: " + createOrderCommand.getRestaurantId());
+        });
     }
 
     private void checkCustomer(UUID customerId) {

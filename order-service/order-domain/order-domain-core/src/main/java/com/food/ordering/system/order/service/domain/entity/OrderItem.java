@@ -10,7 +10,6 @@ import lombok.ToString;
 
 
 @Getter
-@Builder
 @ToString
 public class OrderItem extends BaseEntity<OrderItemID> {
     private OrderId orderId;
@@ -18,6 +17,15 @@ public class OrderItem extends BaseEntity<OrderItemID> {
     private final int quantity;
     private final Money price;
     private final Money subTotal;
+
+    private OrderItem(Builder builder) {
+        super.setId(builder.orderItemID);
+        orderId = builder.orderId;
+        product = builder.product;
+        quantity = builder.quantity;
+        price = builder.price;
+        subTotal = builder.subTotal;
+    }
 
     void initializeOrderItem(OrderId orderId, OrderItemID orderItemID) {
         this.orderId = orderId;
@@ -30,4 +38,57 @@ public class OrderItem extends BaseEntity<OrderItemID> {
                 price.multiply(quantity).equals(subTotal);
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private OrderItemID orderItemID;
+        private OrderId orderId;
+        private Product product;
+        private int quantity;
+        private Money price;
+        private Money subTotal;
+
+        private Builder() {
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        public Builder id(OrderItemID val) {
+            orderItemID = val;
+            return this;
+        }
+
+        public Builder orderId(OrderId val) {
+            orderId = val;
+            return this;
+        }
+
+        public Builder product(Product val) {
+            product = val;
+            return this;
+        }
+
+        public Builder quantity(int val) {
+            quantity = val;
+            return this;
+        }
+
+        public Builder price(Money val) {
+            price = val;
+            return this;
+        }
+
+        public Builder subTotal(Money val) {
+            subTotal = val;
+            return this;
+        }
+
+        public OrderItem build() {
+            return new OrderItem(this);
+        }
+    }
 }
