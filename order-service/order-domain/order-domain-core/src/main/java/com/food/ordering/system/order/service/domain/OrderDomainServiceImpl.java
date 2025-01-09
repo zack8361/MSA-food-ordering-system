@@ -1,4 +1,5 @@
-import com.food.ordering.system.order.service.domain.OrderDomainService;
+package com.food.ordering.system.order.service.domain;
+
 import com.food.ordering.system.order.service.domain.entity.Order;
 import com.food.ordering.system.order.service.domain.entity.Product;
 import com.food.ordering.system.order.service.domain.entity.Restaurant;
@@ -7,12 +8,14 @@ import com.food.ordering.system.order.service.domain.event.OrderCreateEvent;
 import com.food.ordering.system.order.service.domain.event.OrderPaidEvent;
 import com.food.ordering.system.order.service.domain.exception.OrderDomainException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @Slf4j
+@Component
 public class OrderDomainServiceImpl implements OrderDomainService {
 
     private static final String UTC = "UTC";
